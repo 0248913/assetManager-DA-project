@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+
+<body>
+    register now!
+</body>
+
+
+
+</html>
+
+<form method="POST" autocomplete="off">
+
+    {% csrf_token %}
+
+    {{registerform.as_p}}
+
+    <input type="submit" value="Register"/>
+
+
+
+</form>

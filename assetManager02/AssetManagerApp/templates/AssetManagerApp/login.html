@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+
+<body>
+    Login
+</body>
+</html>
+<form method="POST" autocomplete="off">
+
+    {% csrf_token %}
+
+    {{loginform.as_p}}
+
+    <input type="submit" value="Register" />
+
+
+
+</form>

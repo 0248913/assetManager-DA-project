@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <h2>Add New Log</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button typr="submit">Submit</button>
+
+    </form>
+
+    <a href="{% url 'dashboard' %}" class="Button">back</a>
+
+</body>
+</html>

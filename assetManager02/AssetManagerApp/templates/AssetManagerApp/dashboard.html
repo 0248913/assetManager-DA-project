@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <style>
+        .Button {
+            background-color:white;
+            border: 2px solid black;
+            color: black;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .Text {
+            font-size:large;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1 class="Text">Welcome to Your Dashboard, {{ request.user.username}} </h1>
+
+    <h2>Add New Log</h2>
+    <a href="{% url 'newLog' %}" class="Button">+</a>
+
+    <h2> Your Logs</h2>
+    {% if user_logs %}
+        {% for log in user_logs %}
+    <div>
+        <p>{{ log.text }}</p>
+
+        <form method="post" action="{% url 'editLog' log.id %}">
+
+            {% csrf_token %}
+            <button type="submit" class="Button">Edit</button>
+        </form>
+
+        <form method="post" action="{% url 'deleteLog' log.id %}">
+            {% csrf_token %}
+            <button type="submit" class="Button">Delete</button>
+        </form>
+    </div>
+        {% endfor %}
+    {% else %}
+            <p>No logs found.</p>
+   {% endif %}
+
+    <a href="{% url 'logout' %}" class="Button">Logout</a>
+
+</body>
+</html>
+
