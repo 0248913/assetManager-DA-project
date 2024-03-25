@@ -39,8 +39,8 @@ urlpatterns = [
      
     path('deleteLog/<int:log_id>/', views.deleteLog, name="deleteLog"),
     
-    path('space', views.spaceManage, name='spaceManage'),
+    path('SpaceManage', views.spaceManage, name='spaceManage'),
     
-    path('spaceCreate', views.spaceManage, name='spaceCreate'),
+    path('SpaceCreate', views.SpaceCreate, name='SpaceCreate'),
     
 ]

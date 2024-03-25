@@ -21,7 +21,7 @@ def homepage(request):
         return render(request, "AssetManagerApp/index.html", {'user_spaces': user_spaces})
     
     else:
-        return render(request, 'index.html')
+        return render(request, "AssetManagerApp/index.html")
 
 
 def register(request):
@@ -124,9 +124,9 @@ def deleteLog(request, log_id):
     
 def spaceManage(request):  
     memberManagment = SpaceMemberManagment.objects.filter()
-    return render(request, 'spaceManage.html', {'memberManagment': memberManagment })
+    return render(request, "AssetManagerApp/spaceManage.html", {'memberManagment': memberManagment })
 
-def createSpace(request):
+def SpaceCreate(request):
     if request.method == 'POST':
         form = CreateSpaceForm(request.POST)
         if form.is_vaild():
@@ -137,6 +137,6 @@ def createSpace(request):
         else:
             form = CreateSpaceForm()
             
-            return render(request, 'create_space.html', {'form': form})
+            return render(request, "AssetManagerApp/SpaceCreate.html", {'form': form})
    
  
