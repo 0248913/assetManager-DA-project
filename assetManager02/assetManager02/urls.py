@@ -23,7 +23,7 @@ from AssetManagerApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('', views.homepage, name=""),
+    path('', views.sitehome, name=""),
     
     path('register', views.register, name="register"),
 
@@ -42,5 +42,7 @@ urlpatterns = [
     path('SpaceManage', views.spaceManage, name='spaceManage'),
     
     path('SpaceCreate', views.SpaceCreate, name='SpaceCreate'),
+
+    path('homepage', views.homepage, name='homepage'),
     
 ]

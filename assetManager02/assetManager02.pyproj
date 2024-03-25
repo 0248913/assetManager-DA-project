@@ -47,6 +47,7 @@
     <Compile Include="assetManager02\wsgi.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AssetManagerApp\templates\AssetManagerApp\homepage.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\newLog.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\dashboard.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\index.html" />

@@ -3,16 +3,7 @@
 
 <body>
 
-    <h2>Spaces</h2>
-    <ul>
-        {% for newSpace in user_spaces %}
-        <li>{{space.name}}</li>
-        {% empty %}
-        <li>No Spaces found.</li>
-        {% endfor %}
-    </ul>
-
-    <a href="{% url 'SpaceCreate' %}">Create Space</a>
+site homepage
 
 </body>
 </html>

@@ -15,16 +15,18 @@ from .forms import UserLogForm
 from .models import UserLog
 from .models import Space, SpaceMemberManagment
 
+def sitehome(request):
+ return render(request, "AssetManagerApp/index.html")
+
 def homepage(request):
     spaces = Space.objects.all()
     
-
     if request.user.is_authenticated:
         user_spaces = Space.objects.filter(owner=request.user)
-        return render(request, "AssetManagerApp/index.html", {'user_spaces': user_spaces})
+        return render(request, "AssetManagerApp/homepage.html", {'user_spaces': user_spaces})
     
     else:
-        return render(request, "AssetManagerApp/index.html")
+        return render(request, "AssetManagerApp/homepage.html")
 
 
 def register(request):
@@ -130,14 +132,12 @@ def spaceManage(request):
     return render(request, "AssetManagerApp/spaceManage.html", {'memberManagment': memberManagment })
 
 def SpaceCreate(request):
+    form = CreateSpaceForm()
     if request.method == 'POST':
         form = CreateSpaceForm(request.POST)
-        if form.is_vaild():
+        if form.is_valid():
             
             newSpace = form.save(commit=False)
             newSpace.owner = request.user
             newSpace.save()
             return redirect('SpaceCreate')
-    return redirect("AssetManagerApp/index.html")
-   
- 

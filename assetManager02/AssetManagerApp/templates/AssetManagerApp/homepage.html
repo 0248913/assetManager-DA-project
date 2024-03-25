@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h2>Spaces</h2>
+    <ul>
+        {% for newSpace in user_spaces %}
+        <li>{{space.name}}</li>
+        {% empty %}
+        <li>No Spaces found.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'SpaceCreate' %}" >Create Space</a>
+
+</body>
+</html>
