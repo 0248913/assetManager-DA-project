@@ -1,8 +1,11 @@
+from os import name
 from django.db.models import manager
 from django.shortcuts import get_object_or_404, render, redirect
+
+import AssetManagerApp
 from. forms import CreateSpaceForm, CreateUserForm, LoginForm
 
-from django.contrib.auth.models import auth
+from django.contrib.auth.models import User, auth
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -130,13 +133,11 @@ def SpaceCreate(request):
     if request.method == 'POST':
         form = CreateSpaceForm(request.POST)
         if form.is_vaild():
-            new_space = form.save(commit=False)
-            new_space.owner = request.user
-            new_space.save()
-            return redirect('homepage')
-        else:
-            form = CreateSpaceForm()
             
-            return render(request, "AssetManagerApp/SpaceCreate.html", {'form': form})
+            newSpace = form.save(commit=False)
+            newSpace.owner = request.user
+            newSpace.save()
+            return redirect('SpaceCreate')
+    return redirect("AssetManagerApp/index.html")
    
  
