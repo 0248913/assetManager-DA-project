@@ -53,6 +53,8 @@
     <Content Include="AssetManagerApp\templates\AssetManagerApp\login.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\register.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\editLog.html" />
+    <Content Include="AssetManagerApp\templates\AssetManagerApp\SpaceCreate.html" />
+    <Content Include="AssetManagerApp\templates\AssetManagerApp\spaceManage.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

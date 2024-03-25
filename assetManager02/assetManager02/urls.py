@@ -38,6 +38,9 @@ urlpatterns = [
     path('editLog/<int:log_id>/', views.editLog, name="editLog"),
      
     path('deleteLog/<int:log_id>/', views.deleteLog, name="deleteLog"),
-     
+    
+    path('space', views.spaceManage, name='spaceManage'),
+    
+    path('spaceCreate', views.spaceManage, name='spaceCreate'),
     
 ]

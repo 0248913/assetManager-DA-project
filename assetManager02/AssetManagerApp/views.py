@@ -1,5 +1,6 @@
+from django.db.models import manager
 from django.shortcuts import get_object_or_404, render, redirect
-from. forms import CreateUserForm, LoginForm
+from. forms import CreateSpaceForm, CreateUserForm, LoginForm
 
 from django.contrib.auth.models import auth
 
@@ -9,9 +10,18 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import UserLogForm
 from .models import UserLog
+from .models import Space, SpaceMemberManagment
 
 def homepage(request):
-    return render(request, "AssetManagerApp/index.html")
+    spaces = Space.objects.all()
+    
+
+    if request.user.is_authenticated:
+        user_spaces = Space.objects.filter(owner=request.user)
+        return render(request, "AssetManagerApp/index.html", {'user_spaces': user_spaces})
+    
+    else:
+        return render(request, 'index.html')
 
 
 def register(request):
@@ -112,6 +122,21 @@ def deleteLog(request, log_id):
     log.delete()
     return redirect('dashboard')
     
-  
+def spaceManage(request):  
+    memberManagment = SpaceMemberManagment.objects.filter()
+    return render(request, 'spaceManage.html', {'memberManagment': memberManagment })
+
+def createSpace(request):
+    if request.method == 'POST':
+        form = CreateSpaceForm(request.POST)
+        if form.is_vaild():
+            new_space = form.save(commit=False)
+            new_space.owner = request.user
+            new_space.save()
+            return redirect('homepage')
+        else:
+            form = CreateSpaceForm()
+            
+            return render(request, 'create_space.html', {'form': form})
    
  

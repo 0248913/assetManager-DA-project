@@ -1,11 +1,13 @@
+from dataclasses import fields
 from turtle import textinput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import UserLog
-
+from .models import Space
 from django import forms
 
 from django.forms.widgets import PasswordInput, TextInput
+
 
 class CreateUserForm(UserCreationForm):
     
@@ -25,4 +27,10 @@ class UserLogForm(forms.ModelForm):
     
     class Meta:
         model = UserLog
-        fields = ['text']
+        fields = ['title','information']
+
+class CreateSpaceForm(forms.ModelForm):
+    class Meta:
+        model = Space
+        fields = ['name']
+        

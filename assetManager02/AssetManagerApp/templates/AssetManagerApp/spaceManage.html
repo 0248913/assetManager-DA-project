@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h1>{{ space.name }}</h1>
+    <p> {{space.descripton }}</p>
+    <h2>Members</h2>
+    <ul>
+        {% for memberManagment in memberManagment %}
+            <li> {{ memberManagment.user.username }} </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
