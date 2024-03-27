@@ -32,7 +32,7 @@
     <h1 class="Text">Welcome to Your Dashboard, {{ request.user.username}} </h1>
 
     <h2>Add New Log</h2>
-    <a href="{% url 'newLog' %}" class="Button">+</a>
+    <a href="{% url 'newLog' space_id=space.id %}" class="Button">+</a>
 
     <h2> Your Logs</h2>
     {% if user_logs %}
@@ -41,13 +41,13 @@
         <h3>{{ log.title }}</h3>
         <p><strong>Information:</strong>{{ log.information }}</p>
 
-        <form method="post" action="{% url 'editLog' log.id %}">
+        <form method="post" action="{% url 'editLog' log.id space.id %}">
 
             {% csrf_token %}
             <button type="submit" class="Button">Edit</button>
         </form>
 
-        <form method="post" action="{% url 'deleteLog' log.id %}">
+        <form method="post" action="{% url 'deleteLog' log.id space.id %}">
             {% csrf_token %}
             <button type="submit" class="Button">Delete</button>
         </form>

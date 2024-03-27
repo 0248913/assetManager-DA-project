@@ -7,15 +7,14 @@
 </head>
 <body>
     <h2>Spaces</h2>
+    <a href="{% url 'spaceCreate' %}">create new space</a>
     <ul>
         {% for newSpace in user_spaces %}
-        <li>{{space.name}}</li>
+        <li><a href="{% url 'dashboard' space_id=newSpace.id %}">{{newSpace.name}}<</a>/li>
         {% empty %}
         <li>No Spaces found.</li>
         {% endfor %}
     </ul>
-
-    <a href="{% url 'SpaceCreate' %}" >Create Space</a>
 
 </body>
 </html>

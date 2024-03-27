@@ -18,6 +18,7 @@ from .models import Space, SpaceMemberManagment
 def sitehome(request):
  return render(request, "AssetManagerApp/index.html")
 
+@login_required(login_url="login")
 def homepage(request):
     spaces = Space.objects.all()
     
@@ -67,14 +68,16 @@ def login(request):
                 
                 auth.login(request, user)
                 
-                return redirect("dashboard")
+                return redirect("homepage")
             
     context = {'loginform':form}
     
     return render(request, "AssetManagerApp/login.html",context=context)
 
 @login_required(login_url="login")
-def dashboard(request):
+def dashboard(request, space_id):
+    
+    space = get_object_or_404(Space, id=space_id)
     
     if request.method == "POST":
        form = UserLogForm(request.POST)
@@ -83,13 +86,13 @@ def dashboard(request):
            log.user = request.user
            log.save()
            
-           return redirect('dashboard')   
+           return redirect('dashboard', space_id=space_id)   
         
     else:
         form = UserLogForm()
     
-    user_logs = UserLog.objects.filter(user=request.user)
-    return render(request,"AssetManagerApp/dashboard.html", {'form': form, 'user_logs': user_logs})
+    user_logs = UserLog.objects.filter(user=request.user, space=space)
+    return render(request,"AssetManagerApp/dashboard.html", {'form': form, 'user_logs': user_logs, 'space': space})
 
 
 def logout(request):
@@ -98,46 +101,60 @@ def logout(request):
     
     return redirect("")
     
-def newLog(request):
+def newLog(request, space_id):
+    space = get_object_or_404(Space, id=space_id)
     form = UserLogForm()
     if request.method == "POST":
         form = UserLogForm(request.POST)
         if form.is_valid():
             log = form.save(commit=False)
             log.user = request.user
+            log.space = space
             log.save()
-            return redirect('newLog')
+            return redirect('dashboard', space_id=space_id)
     user_logs = UserLog.objects.filter(user=request.user)
     return render(request, "AssetManagerApp/newLog.html", {'form': form, 'user_logs': user_logs})
    
-def editLog(request, log_id):
+def editLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
+    space = get_object_or_404(Space, id=space_id)
 
     if request.method == 'POST':
         form = UserLogForm(request.POST, instance=log)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')
+            return redirect('dashboard', space_id=space_id)
     else:
         form = UserLogForm(instance=log)
     return render(request, "AssetManagerApp/editLog.html", {'form': form})    
 
-def deleteLog(request, log_id):
+def deleteLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
+    space = get_object_or_404(Space, id=space_id)
     log.delete()
-    return redirect('dashboard')
+    return redirect('dashboard', space_id=space_id)
     
 def spaceManage(request):  
     memberManagment = SpaceMemberManagment.objects.filter()
     return render(request, "AssetManagerApp/spaceManage.html", {'memberManagment': memberManagment })
 
-def SpaceCreate(request):
-    form = CreateSpaceForm()
+def spaceCreate(request):
     if request.method == 'POST':
         form = CreateSpaceForm(request.POST)
         if form.is_valid():
-            
-            newSpace = form.save(commit=False)
-            newSpace.owner = request.user
-            newSpace.save()
-            return redirect('SpaceCreate')
+            new_space = form.save(commit=False)
+            new_space.owner = request.user
+            new_space.save()
+            return redirect('homepage')
+        
+    else:
+        form = CreateSpaceForm()
+    return render(request, "AssetManagerApp/spaceCreate.html")
+
+def shareSpace(request, space_id):
+    space = Space.objects.get(id=space_id)
+    form = SpaceMemberManagment(request.POST or None, initial={'space': space})
+    if form.is_valid():
+        form.save()
+        return redirect('dashboard', space_id=space_id)
+    return render(request, 'share_space.html', {'form': form})

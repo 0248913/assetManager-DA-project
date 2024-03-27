@@ -33,16 +33,18 @@ urlpatterns = [
 
     path('logout', views.logout, name="logout"),
     
-    path('newLog', views.newLog, name="newLog"),
+    path('newLog/<int:space_id>/', views.newLog, name="newLog"),
     
-    path('editLog/<int:log_id>/', views.editLog, name="editLog"),
+    path('editLog/<int:log_id>/<int:space_id>/', views.editLog, name="editLog"),
      
-    path('deleteLog/<int:log_id>/', views.deleteLog, name="deleteLog"),
+    path('deleteLog/<int:log_id>//<int:space_id>/', views.deleteLog, name="deleteLog"),
     
     path('SpaceManage', views.spaceManage, name='spaceManage'),
-    
-    path('SpaceCreate', views.SpaceCreate, name='SpaceCreate'),
 
     path('homepage', views.homepage, name='homepage'),
+    
+    path('spaceCreate', views.spaceCreate, name='spaceCreate'),
+    
+    path('dashboard/<int:space_id>/', views.dashboard, name= 'dashboard'),
     
 ]
