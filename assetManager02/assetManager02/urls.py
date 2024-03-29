@@ -38,13 +38,14 @@ urlpatterns = [
     path('editLog/<int:log_id>/<int:space_id>/', views.editLog, name="editLog"),
      
     path('deleteLog/<int:log_id>//<int:space_id>/', views.deleteLog, name="deleteLog"),
-    
-    path('SpaceManage', views.spaceManage, name='spaceManage'),
-
+  
     path('homepage', views.homepage, name='homepage'),
     
     path('spaceCreate', views.spaceCreate, name='spaceCreate'),
     
     path('dashboard/<int:space_id>/', views.dashboard, name= 'dashboard'),
     
+    path('spaceManage/<int:space_id>/members/', views.spaceManage, name='spaceManage')
+    
 ]
+

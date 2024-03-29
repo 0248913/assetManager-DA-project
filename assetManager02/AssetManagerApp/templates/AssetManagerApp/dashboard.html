@@ -31,12 +31,15 @@
 <body>
     <h1 class="Text">Welcome to Your Dashboard, {{ request.user.username}} </h1>
 
+    <button class="Button" onclick="toggleCodeDisplay()">Show Space Code</button>
+    <div class="code-display" id="codeDisplay">Space Code: {{ space.code }}</div>
+
     <h2>Add New Log</h2>
     <a href="{% url 'newLog' space_id=space.id %}" class="Button">+</a>
 
     <h2> Your Logs</h2>
     {% if user_logs %}
-        {% for log in user_logs %}
+    {% for log in user_logs %}
     <div class="log-item">
         <h3>{{ log.title }}</h3>
         <p><strong>Information:</strong>{{ log.information }}</p>
@@ -52,12 +55,25 @@
             <button type="submit" class="Button">Delete</button>
         </form>
     </div>
-        {% endfor %}
+    {% endfor %}
     {% else %}
-            <p>No logs found.</p>
-   {% endif %}
+    <p>No logs found.</p>
+    {% endif %}
 
+    <a href="{% url 'spaceManage' space_id=space.id %}" class="Button">View Space Members</a>
     <a href="{% url 'logout' %}" class="Button">Logout</a>
+
+
+    <script>
+        function toggleCodeDisplay() {
+            var codeDisplay = document.getElementById("codeDisplay");
+            if (codeDisplay.style.display === "none") {
+                codeDisplay.style.display = "block";
+            } else {
+                codeDisplay.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AssetManagerApp\templates\AssetManagerApp\homepage.html" />
+    <Content Include="AssetManagerApp\templates\AssetManagerApp\master.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\newLog.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\dashboard.html" />
     <Content Include="AssetManagerApp\templates\AssetManagerApp\index.html" />
@@ -66,6 +67,15 @@
     <Folder Include="AssetManagerApp\templates\AssetManagerApp\" />
   </ItemGroup>
   <ItemGroup>
+    <Interpreter Include="env2\">
+      <Id>env2</Id>
+      <Version>0.0</Version>
+      <Description>env2 (Python 3.12 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
     <Interpreter Include="env\">
       <Id>env</Id>
       <Version>0.0</Version>
@@ -75,6 +85,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.12" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

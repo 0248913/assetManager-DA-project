@@ -1,19 +1,51 @@
 <!DOCTYPE html>
-
 <html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
 
+    <style>
+        .login-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-51%, -50%)
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="password"] {
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            width: 100%;
+        }
+
+    </style>
+</head>
 <body>
-    Login
+
+    <nav style="background-color: #007bff; color: #fff;">
+        <div>
+            <a herf="#" style="color: #fff; padding: 10px; border-radius: 10px;">Asset Manager</a>
+        </div>
+    </nav>
+
+    <div class="login-container">
+    <h2>Login</h2>
+
+    <form method="POST" autocomplete="off">
+        {% csrf_token %}
+        <div class="input-group">
+            {{ loginform.username }}
+        </div>
+        <div class="input-group">
+            {{ loginform.password }}
+        </div>
+
+        <input type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; cursor: pointer;" value="Login" />
+    </form>
+    </div>
+
 </body>
 </html>
-<form method="POST" autocomplete="off">
-
-    {% csrf_token %}
-
-    {{loginform.as_p}}
-
-    <input type="submit" value="Register" />
-
-
-
-</form>

@@ -6,12 +6,10 @@
     <title></title>
 </head>
 <body>
-    <h1>{{ space.name }}</h1>
-    <p> {{space.descripton }}</p>
-    <h2>Members</h2>
+    <h1>Members of {{ space.name }}</h1>
     <ul>
-        {% for memberManagment in memberManagment %}
-            <li> {{ memberManagment.user.username }} </li>
+        {% for member in members %}
+            <li>{{member.username}}</li>
         {% endfor %}
     </ul>
 

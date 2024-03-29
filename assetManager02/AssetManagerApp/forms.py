@@ -33,4 +33,7 @@ class CreateSpaceForm(forms.ModelForm):
     class Meta:
         model = Space
         fields = ['name']
+       
+class SpaceCodeForm(forms.Form):
+    code = forms.CharField(label="Enter Code", max_length=8)
         
