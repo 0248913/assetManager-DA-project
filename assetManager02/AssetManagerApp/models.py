@@ -12,8 +12,8 @@ class UserLog(models.Model):
     
 class Meta:
     permissons = [
-        ("delete_log", "Can delete log"),   
-    ]
+        ("delete_log", "Can delete log")
+        ]
 
 
 class Space(models.Model):

@@ -143,7 +143,6 @@ def editLog(request, log_id, space_id):
     return render(request, "AssetManagerApp/editLog.html", {'form': form})    
 
 @login_required
-@permission_required('AssetManagerApp.delete_log', raise_exception=True)
 def deleteLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
     space = get_object_or_404(Space, id=space_id)
