@@ -1,23 +1,24 @@
 <!DOCTYPE html>
+<html lang="en">
 
-<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Form</title>
+  <link href="https://bootswatch.com/5/zephyr/bootstrap.min.css" rel="stylesheet">
+</head>
 
 <body>
-    register now!
+
+  <div class="container mt-5">
+    <h2 class="mb-4">Register Now!</h2>
+    <form method="POST" autocomplete="off">
+      {% csrf_token %}
+      {{registerform.as_p}}
+      <input type="submit" class="btn btn-primary" value="Register">
+    </form>
+  </div>
+
 </body>
 
-
-
 </html>
-
-<form method="POST" autocomplete="off">
-
-    {% csrf_token %}
-
-    {{registerform.as_p}}
-
-    <input type="submit" value="Register"/>
-
-
-
-</form>

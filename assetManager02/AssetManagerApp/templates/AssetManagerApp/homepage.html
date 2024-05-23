@@ -1,26 +1,59 @@
 <!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/zephyr/bootstrap.min.css" />
+    <style>
+        h2 {
+            margin-top: 50px; /* Adjust as needed */
+        }
+        .space-card {
+            margin-bottom: 10px; /* Adjust as needed */
+        }
+        form {
+            margin-top: 20px; /* Adjust as needed */
+        }
+    </style>
 </head>
 <body>
-    <h2>Spaces</h2>
-    <a href="{% url 'spaceCreate' %}">create new space</a>
-    <ul>
-        {% for newSpace in user_spaces %}
-        <li>
-            <a href="{% url 'dashboard' space_id=newSpace.id %}">{{newSpace.name}}<</a>
-            {% empty %}
-        <li>No Spaces found.</li>
-        {% endfor %}
-    </ul>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Join Space</button>
-    </form>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'spaceCreate' %}">Create New Space</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <div class="container">
+        <h2>Spaces</h2>
+        {% for newSpace in user_spaces %}
+        <div class="card text-white bg-primary mb-3 space-card" style="max-width: 20rem;">
+            <div class="card-header">{{ newSpace.name }}</div>
+            <div class="card-body">
+                <h4 class="card-title"><a href="{% url 'dashboard' space_id=newSpace.id %}">{{ newSpace.name }}</a></h5>
+                <p class="card-text"><a href="{% url 'dashboard' space_id=newSpace.id %}">{{ newSpace.name }}</a></h5>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Spaces found.</p>
+        {% endfor %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Join Space</button>
+        </form>
+        <a href="{% url 'spaceCreate' %}" class="btn btn-primary">Create New Space</a>
+    </div>
 </body>
 </html>
+

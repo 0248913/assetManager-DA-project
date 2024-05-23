@@ -2,45 +2,43 @@
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/zephyr/bootstrap.min.css" />
 
     <style>
         .login-container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-51%, -50%);
-        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 50px;
         }
         .input-group {
             margin-bottom: 10px;
-        }
-        .input-group input[type="text"],
-        .input-group input[type="password"] {
-            border-radius: 10px;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            width: 100%;
-        }
-
-        .login-container h2 {
-            margin-bottom: 20px;
-        }
-        .login-container input[type="submit"] {
-            margin-top: 20px;
         }
 
     </style>
 </head>
 <body>
 
-    <nav style="background-color: #007bff; color: #fff; padding: 10px; border-radius: 5px; border: 10px;">
-        <div>
-            <a herf="#" style="color: #fff;">Asset Manager</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href=>Asset Manager</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <a class="nav-link" href="{% url 'login' %}">
+                        <button type="button" class="btn btn-primary">Sign In</button>
+                    </a>
+                    <a class="nav-link" href="{% url 'register' %}">
+                        <button type="button" class="btn btn-primary">Register</button>
+                    </a>
+                </ul>
+            </div>
         </div>
     </nav>
-
     <div class="login-container">
-    <h2>Login</h2>
+        <h2>Login</h2>
 
     <form method="POST" autocomplete="off">
         {% csrf_token %}
@@ -51,7 +49,7 @@
             {{ loginform.password }}
         </div>
 
-        <input type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; cursor: pointer;" value="Login" />
+        <input type="submit" class="btn btn-primary" value="login" />
     </form>
     </div>
 

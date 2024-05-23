@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import UserLog
 from .models import Space
 from django import forms
+from .models import Group
 
 from django.forms.widgets import PasswordInput, TextInput
 
@@ -36,4 +37,8 @@ class CreateSpaceForm(forms.ModelForm):
        
 class SpaceCodeForm(forms.Form):
     code = forms.CharField(label="Enter Code", max_length=8)
-        
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name', 'members']        

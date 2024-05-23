@@ -1,3 +1,6 @@
+from django.db import models
+from django.utils import timezone
+
 import random
 import string
 from django.contrib.auth.models import User
@@ -35,4 +38,9 @@ class Space(models.Model):
             self.code = self.generateCode()
         super().save(*args, **kwargs)
 
+class Group(models.Model):
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField(User)
 
+    def __str__(self):
+        return self.name
