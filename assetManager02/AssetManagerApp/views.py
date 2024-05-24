@@ -135,25 +135,28 @@ def newLog(request, space_id):
 def editLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
     space = get_object_or_404(Space, id=space_id)
-    
-    
+
+  
     if log.user != request.user:
-        
         messages.error(request, 'You do not have permission to edit this log.')
-        return redirect('dashboard', space_id=space_id)
-    
+        return redirect('dashboard', space_id=space.id)
+
     if request.method == 'POST':
         form = UserLogForm(request.POST, instance=log)
         if form.is_valid():
             form.save()
             messages.success(request, 'Log updated successfully.')
-            return redirect('dashboard', space_id=space_id)
+            return redirect('dashboard', space_id=space.id)
         else:
+          
+            for field, errors in form.errors.items():
+                print(f"Error in {field}: {errors}")
             messages.error(request, 'Error updating log. Please check the form.')
     else:
         form = UserLogForm(instance=log)
-    
-    return redirect('dashboard', space_id=space_id)  # Redirect immediately
+
+    return render(request, "AssetManagerApp/editLog.html", {'form': form, 'space': space})
+
 
 @login_required
 def deleteLog(request, log_id, space_id):
@@ -165,7 +168,7 @@ def deleteLog(request, log_id, space_id):
     if request.method == 'POST':
         log.delete()
         return redirect('dashboard', space_id=space_id)
-    return render(request, 'confirm_delete.html', {'log': log})
+    return render(request, 'AssetManagerApp/deleteLog.html', {'log': log})
     
 
 def spaceCreate(request):
