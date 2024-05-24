@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Group, Permission
 from .models import Group
 from .forms import GroupForm
-
+from .models import spaceRoles
 from django.db import models
 from .forms import UserLogForm
 from .models import UserLog
@@ -34,7 +34,7 @@ def homepage(request):
                 code = form.cleaned_data['code']
                 try:
                     space = Space.objects.get(code=code)
-                    
+                    spaceRoles.objects.create(user=request.user, space=space, role='member')
                     space.members.add(request.user)
                     return redirect('homepage')  
                 except Space.DoesNotExist:
@@ -175,9 +175,10 @@ def spaceCreate(request):
     if request.method == 'POST':
         form = CreateSpaceForm(request.POST)
         if form.is_valid():
-            new_space = form.save(commit=False)
-            new_space.owner = request.user
-            new_space.save()
+            space = form.save(commit=False)
+            space.owner = request.user
+            space.save()
+            spaceRoles.objects.create(user=request.user, space=space, role='owner')
             return redirect('homepage')
         
     else:

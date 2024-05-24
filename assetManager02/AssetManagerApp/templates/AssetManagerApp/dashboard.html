@@ -17,21 +17,20 @@
         .btn-logout {
             margin-left: 10px;
         }
+        .owner-badge {
+            font-weight: bold;
+            color: #007bff; 
+        }
+        .member-badge {
+        
+            color: #007bff; 
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="mb-4">Welcome to Your Dashboard, {{ request.user.username }}</h1>
-
-        <!-- Display messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} mt-4" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
+        
         <!-- Tabs Navigation -->
         <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
             <li class="nav-item" role="presentation">
@@ -41,7 +40,7 @@
                 <a class="nav-link" id="members-tab" data-bs-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">Space Members</a>
             </li>
         </ul>
-
+        
         <!-- Tabs Content -->
         <div class="tab-content" id="dashboardTabsContent">
             <div class="tab-pane fade show active" id="logs" role="tabpanel" aria-labelledby="logs-tab">
@@ -79,13 +78,22 @@
             <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
                 <h2 class="mt-4">Space Members</h2>
                 <ul class="list-group">
-                    {% for member in space.members.all %} 
-                        <li class="list-group-item">{{ member.username }}</li>
+                    <li class="list-group-item">
+                        {{ space.owner.username }}
+                        <span class="owner-badge">(Owner)</span>
+                    </li>
+                    {% for member in space.members.all %}
+                        {% if member != space.owner %}
+                            <li class="list-group-item">
+                                {{ member.username }}
+                                <span class="member-badge">(Member)</span>
+                            </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
         </div>
-
+        
         <div class="mt-4">
             <a href="{% url 'logout' %}" class="btn btn-primary btn-logout">Logout</a>
         </div>

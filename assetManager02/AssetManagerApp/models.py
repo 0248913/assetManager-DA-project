@@ -44,3 +44,16 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+    
+class spaceRoles(models.Model):
+    ROLE_CHOICES = (
+        ('owner', 'Owner'),
+        ('member', 'Member'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    space = models.ForeignKey(Space, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+
+    class Meta:
+        unique_together = ('user', 'space')
