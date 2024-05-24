@@ -136,9 +136,9 @@ def editLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
     space = get_object_or_404(Space, id=space_id)
     
-    # Check if the logged-in user owns the log
+    
     if log.user != request.user:
-        # If not, add an error message
+        
         messages.error(request, 'You do not have permission to edit this log.')
         return redirect('dashboard', space_id=space_id)
     
