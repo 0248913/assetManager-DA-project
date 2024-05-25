@@ -28,7 +28,7 @@ class UserLogForm(forms.ModelForm):
     
     class Meta:
         model = UserLog
-        fields = ['title','information']
+        fields = ['title','information', 'in_use']
 
 class CreateSpaceForm(forms.ModelForm):
     class Meta:

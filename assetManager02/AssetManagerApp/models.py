@@ -11,6 +11,9 @@ class UserLog(models.Model):
     title = models.CharField(max_length=100, default='')
     information = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    in_use = models.BooleanField(default=False)
+    last_changed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='last_changed_logs')
+    
 
     class Meta:
         permissions = [

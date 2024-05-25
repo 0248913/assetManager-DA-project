@@ -21,9 +21,14 @@ from django.urls import path
 from AssetManagerApp import views
 
 urlpatterns = [
+
+    path('deleteSpace/<int:space_id>/', views.deleteSpace, name="deleteSpace"),
+    
     path('admin/', admin.site.urls),
     
     path('', views.sitehome, name=""),
+
+    path('calendar', views.calendar, name="calendar"),
     
     path('register', views.register, name="register"),
 
@@ -45,7 +50,7 @@ urlpatterns = [
     
     path('dashboard/<int:space_id>/', views.dashboard, name= 'dashboard'),
     
-    path('spaceManage/<int:space_id>/members/', views.spaceManage, name='spaceManage')
+    path('spaceManage/<int:space_id>/members/', views.spaceManage, name='spaceManage'),
     
 ]
 

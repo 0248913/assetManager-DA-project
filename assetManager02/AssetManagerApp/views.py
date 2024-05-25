@@ -25,6 +25,7 @@ def sitehome(request):
 def homepage(request):
     spaces = Space.objects.all()
     
+    
     if request.user.is_authenticated:
         user_spaces = Space.objects.filter(models.Q(owner=request.user) | models.Q(members=request.user)).distinct()
         form = SpaceCodeForm() 
@@ -92,7 +93,7 @@ def login(request):
 @login_required(login_url="login")
 def dashboard(request, space_id):
     space = get_object_or_404(Space, id=space_id)
-    
+    logs = UserLog.objects.filter(space=space).select_related('user')
     if request.method == "POST":
         form = UserLogForm(request.POST)
         if form.is_valid():
@@ -129,8 +130,8 @@ def newLog(request, space_id):
             log.space = space
             log.save()
             return redirect('dashboard', space_id=space_id)
-    user_logs = UserLog.objects.filter(user=request.user)
-    return render(request, "AssetManagerApp/newLog.html", {'form': form, 'user_logs': user_logs})
+    user_logs = UserLog.objects.filter(space=space)
+    return render(request, "AssetManagerApp/newLog.html", {'form': form, 'user_logs': user_logs, 'space': space})
    
 def editLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
@@ -194,3 +195,17 @@ def spaceManage(request, space_id):
     space = get_object_or_404(Space, id=space_id)
     members = space.members.all()
     return render(request, "AssetManagerApp/spaceManage.html", {'space': space, 'members': members})
+
+def deleteSpace(request, space_id):
+    space = get_object_or_404(Space, id=space_id)
+
+    if space.owner != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this space.")
+    
+    space.delete()
+    return redirect('homepage')
+
+def calendar(request):
+    return render(request, "AssetManagerApp/calendar.html")
+    
+

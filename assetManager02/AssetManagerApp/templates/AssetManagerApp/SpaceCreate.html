@@ -4,6 +4,21 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link href="https://bootswatch.com/5/zephyr/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding: 20px;
+        }
+        input.form-control {
+            width: 250px; 
+            padding: 10px;
+        }
+
+        .btn-button {
+        padding-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Create a new space</h1>
@@ -11,10 +26,13 @@
     <form method="post">
         {% csrf_token %}
         <div class="form group">
-            <label for="id_name">Name</label>
-            <input type="text" id="id_name" name="name" />
+            <label for="id_name">Name</label> 
+            <input type="text" class="form-control" id="id_name" name="name" />
         </div>
-        <button type="submit">Create Space</button>
+    </div>
+    <div class="btn-button">
+        <button type="submit" class="btn btn-primary"  >Create Space</button>
+    </div>
     </form>
 
 </body>

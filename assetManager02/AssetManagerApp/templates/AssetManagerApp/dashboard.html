@@ -1,9 +1,11 @@
+<!-- dashboard.html -->
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="https://bootswatch.com/5/superhero/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/5/zephyr/bootstrap.min.css">
     <style>
         body {
             padding: 20px;
@@ -22,7 +24,6 @@
             color: #007bff; 
         }
         .member-badge {
-        
             color: #007bff; 
         }
     </style>
@@ -31,67 +32,38 @@
     <div class="container">
         <h1 class="mb-4">Welcome to Your Dashboard, {{ request.user.username }}</h1>
         
-        <!-- Tabs Navigation -->
-        <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="logs-tab" data-bs-toggle="tab" href="#logs" role="tab" aria-controls="logs" aria-selected="true">Your Logs</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="members-tab" data-bs-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">Space Members</a>
-            </li>
-        </ul>
-        
-        <!-- Tabs Content -->
-        <div class="tab-content" id="dashboardTabsContent">
-            <div class="tab-pane fade show active" id="logs" role="tabpanel" aria-labelledby="logs-tab">
-                <h2 class="mt-4">Add New Log</h2>
-                <a href="{% url 'newLog' space_id=space.id %}" class="btn btn-primary mb-4">+</a>
+        <h2 class="mt-4">Add New Log</h2>
+        <a href="{% url 'newLog' space_id=space.id %}" class="btn btn-primary mb-4">+</a>
 
-                <h2>Your Logs</h2>
-                {% if user_logs %}
-                    {% for log in user_logs %}
-                        <div class="card">
-                            <div class="card-body">
-                                <h3 class="card-title">{{ log.title }}</h3>
-                                <p class="card-text"><strong>Information:</strong> {{ log.information }}</p>
-                                <div class="btn-group">
-                                    <form method="post" action="{% url 'editLog' log.id space.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-outline-primary">Edit</button>
-                                    </form>
-                                    <form method="post" action="{% url 'deleteLog' log.id space.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-primary">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
+        <h2>Your Logs</h2>
+        {% if user_logs %}
+            {% for log in user_logs %}
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ log.title }}</h3>
+                        <p class="card-text"><strong>Information:</strong> {{ log.information }}</p>
+                        <p class="card-text"><strong>Created by:</strong> {{ log.user.username }}</p>
+                        <p class="card-text"><strong>In Use:</strong> {% if log.in_use %}On{% else %}Off{% endif %}</p>
+                        <p class="card-text"><strong>Last Changed By:</strong> {{ log.user.username }}</p>
+                        <div class="btn-group">
+                            <form method="post" action="{% url 'editLog' log.id space.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-primary">Edit</button>
+                            </form>
+                            <form method="post" action="{% url 'deleteLog' log.id space.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Delete</button>
+                            </form>
                         </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No logs found.</p>
-                {% endif %}
-
-                <div class="code-display">
-                    <strong>Space Code:</strong> {{ space.code }}
+                    </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
-                <h2 class="mt-4">Space Members</h2>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        {{ space.owner.username }}
-                        <span class="owner-badge">(Owner)</span>
-                    </li>
-                    {% for member in space.members.all %}
-                        {% if member != space.owner %}
-                            <li class="list-group-item">
-                                {{ member.username }}
-                                <span class="member-badge">(Member)</span>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
+            {% endfor %}
+        {% else %}
+            <p>No logs found.</p>
+        {% endif %}
+
+        <div class="code-display">
+            <strong>Space Code:</strong> {{ space.code }}
         </div>
         
         <div class="mt-4">
