@@ -1,10 +1,9 @@
 from django.db import models
 from django.utils import timezone
-
 import random
 import string
-from django.contrib.auth.models import User
-from django.db import models
+from django.contrib.auth.models import User, Permission
+from django.contrib.contenttypes.models import ContentType
 
 class UserLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -12,12 +11,11 @@ class UserLog(models.Model):
     title = models.CharField(max_length=100, default='')
     information = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    
-class Meta:
-    permissons = [
-        ("delete_log", "Can delete log")
-        ]
 
+    class Meta:
+        permissions = [
+            ("delete_log", "Can delete log"),
+        ]
 
 class Space(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_spaces')
@@ -44,7 +42,7 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class spaceRoles(models.Model):
     ROLE_CHOICES = (
         ('owner', 'Owner'),
@@ -53,7 +51,36 @@ class spaceRoles(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     space = models.ForeignKey(Space, on_delete=models.CASCADE)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=100, choices=ROLE_CHOICES)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+   
+        if self.role == 'owner':
+            self.assign_owner_permissions()
+        elif self.role == 'member':
+            self.assign_member_permissions()
+
+    def assign_owner_permissions(self):
+        
+        content_type = ContentType.objects.get_for_model(UserLog)
+
+  
+        owner_permissions = Permission.objects.filter(content_type=content_type).filter(
+            codename__in=['delete_log', 'can_edit_logs', 'can_delete_logs'])
+        self.user.user_permissions.add(*owner_permissions)
+
+    def assign_member_permissions(self):
+      
+        content_type = ContentType.objects.get_for_model(UserLog)
+
+     
+        member_permissions = Permission.objects.filter(content_type=content_type).filter(
+            codename__in=['can_edit_logs'])
+        self.user.user_permissions.add(*member_permissions)
 
     class Meta:
-        unique_together = ('user', 'space')
+        permissions = [
+            ('can_edit_logs', 'Can edit logs'),
+            ('can_delete_logs', 'Can delete logs'),
+        ]
