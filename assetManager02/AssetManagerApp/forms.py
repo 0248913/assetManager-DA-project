@@ -23,12 +23,25 @@ class LoginForm(AuthenticationForm):
     
     username = forms.CharField(widget=TextInput())
     password = forms.CharField(widget=PasswordInput())
-    
+
 class UserLogForm(forms.ModelForm):
-    
+    last_changed_by = forms.CharField(required=False, label='Last Changed By')
+    last_changed_date = forms.DateTimeField(
+        widget=forms.TextInput(attrs={'type': 'datetime-local'}),
+        required=False,
+        label='Last Changed Date'
+    )
+
+    return_by = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        required=False,
+        label='Return By'
+    )
+
     class Meta:
         model = UserLog
-        fields = ['title','information', 'in_use']
+        fields = ['title', 'information', 'in_use', 'last_changed_by', 'last_changed_date', 'return_by']
+
 
 class CreateSpaceForm(forms.ModelForm):
     class Meta:
@@ -36,7 +49,7 @@ class CreateSpaceForm(forms.ModelForm):
         fields = ['name']
        
 class SpaceCodeForm(forms.Form):
-    code = forms.CharField(label="Enter Code", max_length=8)
+     code = forms.CharField(label='Join Code', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Join Code'}))
 
 class GroupForm(forms.ModelForm):
     class Meta:

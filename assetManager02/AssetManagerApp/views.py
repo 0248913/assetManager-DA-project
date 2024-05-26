@@ -16,6 +16,7 @@ from django.db import models
 from .forms import UserLogForm
 from .models import UserLog
 from .models import Space 
+from django.utils import timezone
 
 def sitehome(request):
  return render(request, "AssetManagerApp/index.html")
@@ -23,7 +24,7 @@ def sitehome(request):
 
 @login_required(login_url="login")
 def homepage(request):
-    spaces = Space.objects.all()
+    space = Space.objects.all()
     
     
     if request.user.is_authenticated:
@@ -90,16 +91,18 @@ def login(request):
     
     return render(request, "AssetManagerApp/login.html",context=context)
 
-@login_required(login_url="login")
 def dashboard(request, space_id):
     space = get_object_or_404(Space, id=space_id)
     logs = UserLog.objects.filter(space=space).select_related('user')
+    
     if request.method == "POST":
         form = UserLogForm(request.POST)
         if form.is_valid():
             log = form.save(commit=False)
             log.user = request.user
             log.space = space
+            log.last_changed_by = form.cleaned_data['last_changed_by'] or request.user
+            log.last_changed_date = form.cleaned_data['last_changed_date'] or timezone.now()
             log.save()
             
             messages.success(request, 'Log added successfully.')
@@ -111,34 +114,30 @@ def dashboard(request, space_id):
     
     user_logs = UserLog.objects.filter(space=space)
     return render(request, "AssetManagerApp/dashboard.html", {'form': form, 'user_logs': user_logs, 'space': space})
-
 def logout(request):
-    
     auth.logout(request)
-    
-    return redirect("")
-
+    return redirect("login")
    
 def newLog(request, space_id):
     space = get_object_or_404(Space, id=space_id)
-    form = UserLogForm()
     if request.method == "POST":
         form = UserLogForm(request.POST)
         if form.is_valid():
             log = form.save(commit=False)
             log.user = request.user
             log.space = space
+            log.last_changed_date = timezone.now()
             log.save()
             return redirect('dashboard', space_id=space_id)
+    else:
+        form = UserLogForm()
     user_logs = UserLog.objects.filter(space=space)
     return render(request, "AssetManagerApp/newLog.html", {'form': form, 'user_logs': user_logs, 'space': space})
-   
+
 def editLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
     space = get_object_or_404(Space, id=space_id)
-
     user_role = spaceRoles.objects.filter(user=request.user, space=space).first()
-
 
     if log.user != request.user and (user_role is None or user_role.role != 'owner'):
         messages.error(request, 'You do not have permission to edit this log.')
@@ -147,20 +146,26 @@ def editLog(request, log_id, space_id):
     if request.method == 'POST':
         form = UserLogForm(request.POST, instance=log)
         if form.is_valid():
-            form.save()
+            log = form.save(commit=False)
+            # Ensure the last_changed_date is updated if provided
+            if form.cleaned_data['last_changed_date']:
+                log.last_changed_date = form.cleaned_data['last_changed_date']
+            else:
+                log.last_changed_date = timezone.now()  # Default to current time if not provided
+            
+            # Handle return_by date
+            if form.cleaned_data['return_by']:
+                log.return_by = form.cleaned_data['return_by']
+            
+            log.save()
             messages.success(request, 'Log updated successfully.')
             return redirect('dashboard', space_id=space.id)
         else:
-          
-            for field, errors in form.errors.items():
-                print(f"Error in {field}: {errors}")
             messages.error(request, 'Error updating log. Please check the form.')
     else:
         form = UserLogForm(instance=log)
-
+    
     return render(request, "AssetManagerApp/editLog.html", {'form': form, 'space': space})
-
-
 @login_required
 def deleteLog(request, log_id, space_id):
     log = get_object_or_404(UserLog, id=log_id)
