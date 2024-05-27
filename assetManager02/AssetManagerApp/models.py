@@ -15,6 +15,7 @@ class UserLog(models.Model):
     last_changed_by = models.CharField(max_length=150, null=True, blank=True)
     last_changed_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     return_by = models.DateTimeField(null=True, blank=True)
+    email = models.EmailField(blank=True, null=True)
 
     class Meta:
         permissions = [

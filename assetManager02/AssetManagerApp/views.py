@@ -149,16 +149,16 @@ def editLog(request, log_id, space_id):
         form = UserLogForm(request.POST, instance=log)
         if form.is_valid():
             log = form.save(commit=False)
-            # Ensure the last_changed_date is updated if provided
+       
             if form.cleaned_data['last_changed_date']:
                 log.last_changed_date = form.cleaned_data['last_changed_date']
             else:
-                log.last_changed_date = timezone.now()  # Default to current time if not provided
+                log.last_changed_date = timezone.now() 
             
-            # Handle return_by date
+          
             if form.cleaned_data['return_by']:
                 log.return_by = form.cleaned_data['return_by']
-            
+                log.email = form.cleaned_data['email']
             log.save()
             messages.success(request, 'Log updated successfully.')
             return redirect('dashboard', space_id=space.id)

@@ -18,7 +18,6 @@ class CreateUserForm(UserCreationForm):
         fields = ['username','email','password1','password2']
         
 
-
 class LoginForm(AuthenticationForm):
     
     username = forms.CharField(widget=TextInput())
@@ -31,6 +30,8 @@ class UserLogForm(forms.ModelForm):
         required=False,
         label='Last Changed Date'
     )
+    email = forms.EmailField(required=False, label='Email')
+
 
     return_by = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),

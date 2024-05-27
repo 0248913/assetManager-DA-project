@@ -109,13 +109,13 @@
                                 <p><strong>Last Changed Date:</strong> {{ log.last_changed_date }}</p>
                                 <p><strong>Return By:</strong> {% if log.return_by %}{{ log.return_by|date:"Y-m-d H:i" }}{% else %}Not specified{% endif %}</p>
                             </div>
-                            <div class="btn-group">
-                                <a href="{% url 'editLog' log.id space.id %}" class="btn btn-outline-primary">Edit</a>
+                            
+                                <a href="{% url 'editLog' log.id space.id %}" class="btn btn-primary">Edit</a>
                                 <form method="post" action="{% url 'deleteLog' log.id space.id %}" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                    <button type="submit" class="btn btn-primary">Delete</button>
                                 </form>
-                            </div>
+                          
                         </div>
                     </div>
                 {% endfor %}
