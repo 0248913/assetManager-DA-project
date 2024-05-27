@@ -94,6 +94,8 @@ def login(request):
 def dashboard(request, space_id):
     space = get_object_or_404(Space, id=space_id)
     logs = UserLog.objects.filter(space=space).select_related('user')
+    todo_logs = UserLog.objects.filter(space=space, user=request.user, return_by__isnull=False)
+    space_members = space.members.all()
     
     if request.method == "POST":
         form = UserLogForm(request.POST)
@@ -113,7 +115,7 @@ def dashboard(request, space_id):
         form = UserLogForm()
     
     user_logs = UserLog.objects.filter(space=space)
-    return render(request, "AssetManagerApp/dashboard.html", {'form': form, 'user_logs': user_logs, 'space': space})
+    return render(request, "AssetManagerApp/dashboard.html", {'form': form, 'user_logs': user_logs, 'space': space, 'todo_logs': todo_logs, 'space_members': space_members})
 def logout(request):
     auth.logout(request)
     return redirect("login")
