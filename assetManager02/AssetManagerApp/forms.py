@@ -6,18 +6,23 @@ from .models import UserLog
 from .models import Space
 from django import forms
 from .models import Group
-
+from django.contrib.auth.forms import UserChangeForm
+from .models import User
 from django.forms.widgets import PasswordInput, TextInput
 
 
-class CreateUserForm(UserCreationForm):
-    
+class CreateUserForm(UserCreationForm): 
     class Meta:
-        
         model = User
-        fields = ['username','email','password1','password2']
+        fields = ['email', 'password1', 'password2']
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.username = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
         
-
 class LoginForm(AuthenticationForm):
     
     username = forms.CharField(widget=TextInput())
@@ -55,4 +60,9 @@ class SpaceCodeForm(forms.Form):
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = ['name', 'members']        
+        fields = ['name', 'members']   
+
+class ProfileForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name')     
