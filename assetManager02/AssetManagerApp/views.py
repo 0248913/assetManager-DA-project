@@ -2,7 +2,7 @@ from pyexpat.errors import messages
 from django.db.models import manager
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from. forms import CreateSpaceForm, CreateUserForm, LoginForm, SpaceCodeForm
+from. forms import CreateSpaceForm, CreateUserForm, LoginForm, SpaceCodeForm, UserLogForm, ProfileForm
 from django.http import HttpResponseForbidden
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import authenticate, login, logout
@@ -13,7 +13,6 @@ from .models import Group
 from .forms import GroupForm
 from .models import spaceRoles
 from django.db import models
-from .forms import UserLogForm
 from .models import UserLog
 from .models import Space 
 from django.utils import timezone
@@ -24,11 +23,15 @@ def sitehome(request):
 
 @login_required(login_url="login")
 def homepage(request):
-    space = Space.objects.all()
+    pinned_spaces = Space.objects.filter(pinned=True)
+    unpinned_spaces = Space.objects.filter(pinned=False)
     
     
     if request.user.is_authenticated:
         user_spaces = Space.objects.filter(models.Q(owner=request.user) | models.Q(members=request.user)).distinct()
+        pinned_spaces = user_spaces.filter(pinned=True)
+        unpinned_spaces = user_spaces.filter(pinned=False)
+        
         form = SpaceCodeForm() 
         if request.method == 'POST':
             form = SpaceCodeForm(request.POST)
@@ -41,6 +44,12 @@ def homepage(request):
                     return redirect('homepage')  
                 except Space.DoesNotExist:
                     messages.error(request, 'Invalid space code. Please try again.')
+
+            context = {
+            'pinned_spaces': pinned_spaces,
+            'unpinned_spaces': unpinned_spaces,
+            'form': form,
+        }
         return render(request, "AssetManagerApp/homepage.html", {'user_spaces': user_spaces, 'form': form})
     
     else:
@@ -196,7 +205,7 @@ def spaceCreate(request):
         
     else:
         form = CreateSpaceForm()
-    return render(request, "AssetManagerApp/SpaceCreate.html")
+    return render(request, "AssetManagerApp/spaceCreate.html")
 
 def spaceManage(request, space_id):
     space = get_object_or_404(Space, id=space_id)
@@ -207,7 +216,7 @@ def deleteSpace(request, space_id):
     space = get_object_or_404(Space, id=space_id)
 
     if space.owner != request.user:
-        return HttpResponseForbidden("You are not allowed to delete this space.")
+        return redirect('homepage')
     
     space.delete()
     return redirect('homepage')
@@ -215,4 +224,36 @@ def deleteSpace(request, space_id):
 def calendar(request):
     return render(request, "AssetManagerApp/calendar.html")
     
+@login_required(login_url="login")
+def settings(request):
+    return render(request, "AssetManagerApp/settings.html")
 
+@login_required(login_url="login")
+def pinSpace(request, space_id): 
+    space = get_object_or_404(Space, id=space_id)
+    space.pinned = True
+    space.save()
+    return redirect('homepage')
+
+@login_required(login_url="login")
+def unpinSpace(request, space_id): 
+    space = get_object_or_404(Space, id=space_id)
+    space.pinned = False
+    space.save()
+    return redirect('homepage')
+
+def Profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=user)
+    
+    context = {
+        'user': user,
+        'form': form,
+    }
+    return render(request, 'AssetManagerApp/Profile.html', context)

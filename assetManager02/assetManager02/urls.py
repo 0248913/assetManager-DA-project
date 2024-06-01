@@ -52,5 +52,12 @@ urlpatterns = [
     
     path('spaceManage/<int:space_id>/members/', views.spaceManage, name='spaceManage'),
     
-]
+    path('settings', views.settings, name='settings'),
+    
+   path('pinSpace/<int:space_id>/', views.pinSpace, name='pinSpace'),
+    
+   path('unpinSpace/<int:space_id>/', views.unpinSpace, name='unpinSpace'),
+    
+    path('Profile', views.Profile, name='Profile'),
 
+]
