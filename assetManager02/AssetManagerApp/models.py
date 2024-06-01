@@ -4,6 +4,8 @@ import random
 import string
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import AbstractUser
+
 
 class UserLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -28,6 +30,10 @@ class Space(models.Model):
     name = models.CharField(max_length=100)
     descriptions = models.TextField()
     code = models.CharField(max_length=8, unique=True, null=True)
+    pinned = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
     def generateCode(self):
         characters = string.ascii_letters + string.digits
